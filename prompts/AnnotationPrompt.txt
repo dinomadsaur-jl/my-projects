@@ -1,0 +1,24 @@
+Based on our detailed work developing this interactive Matplotlib editor, the most comprehensive prompt describing the functionality you've achieved would be a set of clear, actionable instructions focusing on the interaction modes for the user.
+This prompt is structured for a user who is about to run the final version of your script.
+📝 Detailed Prompt for Interactive Matplotlib Data Editor
+This script provides an advanced, multi-functional interactive plot for detailed time-series data analysis, offering tools to create, move, and delete annotations using a combination of mouse clicks and keyboard modifiers.
+Core Functionality
+ * Annotation Creation: Place persistent annotations on specific data points on any plotted line.
+ * Anchor Movement (\text{Ctrl} Drag): Move the data point (anchor) that the annotation is tethered to, allowing precise placement over important features.
+ * Text Box Movement (\text{Shift} Drag): Move the annotation's text box independently of its anchor point for clear visualization.
+ * Key-Based Drag Control: Drag operations start upon click, and terminate instantly upon release of the modifier key (\text{Ctrl} or \text{Shift}), overriding the default mouse-release behavior.
+ * Draggable Legend: The plot legend can be repositioned as needed.
+ * Deletion: Remove the most recently placed annotation.
+Actionable User Instructions
+| Action | Modifier Key | Target | Result |
+|---|---|---|---|
+| Create Annotation | None | Click near any line | Finds the nearest data point (within 20 pixels) and creates a red marker (anchor) and a yellow text box. |
+| Rapid Create/Annotate | \text{Ctrl} | Click near any line (no marker hit) | Acts identically to a standard click, enabling fast annotation placement without releasing \text{Ctrl}. |
+| Move Anchor Point | \text{Ctrl} + Drag | Existing Red Marker | Drags the data point (anchor, xy) and the red marker to a new data coordinate. Drag stops when \text{Ctrl} is released. |
+| Move Text Box | \text{Shift} + Drag | Existing Yellow Box | Drags the annotation text box (offset, xytext) relative to its anchor point. Drag stops when \text{Shift} is released. |
+| Delete Last | \text{Delete} or \text{Backspace} | Plot window in focus | Removes the last annotation/marker pair added to the plot. |
+| Move Legend | None | Legend box | Allows standard click-and-drag movement of the legend box. |
+Script Execution Notes
+ * The script requires a CSV file to be loaded via a file dialog.
+ * The script uses a 20-pixel threshold for hit detection during annotation creation, ensuring accuracy regardless of zoom level.
+ * All data channels in the loaded CSV file are plotted, but annotations can be placed on any of them.
