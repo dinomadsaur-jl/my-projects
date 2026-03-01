@@ -60,19 +60,6 @@ Strictly Don’t use terms:
 
 $bannedWords
 
-
-Open App
-Return to Search Results
-r/ChatGPT icon
-Go to ChatGPT
-r/ChatGPT
-
-SpinAI
-
-
-1y ago
-PaperMan1287
-
 I reverse-engineered how ChatGPT thinks. Here’s how to get way better answers.
 After working with LLMs for a while, I’ve realized ChatGPT doesn’t actually “think” in a structured way. It’s just predicting the most statistically probable next word, which is why broad questions tend to get shallow, generic responses.
 
