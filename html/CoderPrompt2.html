@@ -1,0 +1,587 @@
+Here is the complete, self-contained HTML guide for setting up and using Coder Mode with the regenerating techdoc.md design. Copy the entire code block below into an .html file and open it in any browser.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coder Mode – Regenerate techdoc from state.toons | Open WebUI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #0a0c10;
+            color: #e2e8f0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #0f1117;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            border-left: 4px solid #3b82f6;
+            padding-left: 16px;
+        }
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-top: 28px;
+            margin-bottom: 12px;
+        }
+        .badge {
+            display: inline-block;
+            background: #1e293b;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: monospace;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+        .code-block {
+            background: #0a0c10;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1e293b;
+            border: none;
+            color: #94a3b8;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+        .copy-btn:hover {
+            background: #334155;
+            color: white;
+        }
+        .note {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 3px solid #f59e0b;
+        }
+        .success {
+            background: #0f2e1f;
+            border-left: 3px solid #10b981;
+        }
+        .info {
+            background: #1a2a3a;
+            border-left: 3px solid #3b82f6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #1e293b;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #1e293b;
+            font-weight: 600;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: #1e293b;
+            margin: 32px 0;
+        }
+        .command {
+            background: #020617;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-family: monospace;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+        .step {
+            background: #1a1c2b;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .step-number {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .code-block { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧠 Coder Mode – Regenerate techdoc from state.toons</h1>
+    <div class="badge">No Admin Rights | 200K Token Budget | Full Code, No Omissions</div>
+    <p><strong>Coder Mode</strong> gives you Claude‑Code‑like project awareness inside Open WebUI <strong>without admin rights</strong>. You maintain a single source of truth (<code>state.toons</code>) and regenerate <code>techdoc.md</code> on demand. Token usage: ~100‑200 for <code>state.toons</code> + file fetches.</p>
+
+    <div class="success note">
+        ✅ <strong>How it works</strong><br>
+        • <code>state.toons</code> holds all project data: versions, requirements, issues, plan, relationships, and a change log.<br>
+        • On <code>@</code> (refresh), the assistant <strong>regenerates <code>techdoc.md</code></strong> from <code>state.toons</code>, clears the change log, and re‑uploads both files.<br>
+        • No manual editing of <code>techdoc.md</code> – always fresh.<br>
+        • When context fills, run <code>@</code>, then start a new chat – it loads the latest <code>state.toons</code>.
+    </div>
+
+    <hr>
+
+    <h2>📋 Table of Contents</h2>
+    <ul style="margin-left: 20px;">
+        <li><a href="#setup" style="color:#60a5fa;">1. Step‑by‑Step Setup</a></li>
+        <li><a href="#prompt" style="color:#60a5fa;">2. Folder System Prompt (copy exactly)</a></li>
+        <li><a href="#state-template" style="color:#60a5fa;">3. Initial state.toons Template</a></li>
+        <li><a href="#commands" style="color:#60a5fa;">4. Command Reference</a></li>
+        <li><a href="#workflow" style="color:#60a5fa;">5. Workflow & Examples</a></li>
+        <li><a href="#refresh" style="color:#60a5fa;">6. Refresh & Context Window Handling</a></li>
+        <li><a href="#troubleshooting" style="color:#60a5fa;">7. Troubleshooting</a></li>
+        <li><a href="#quickref" style="color:#60a5fa;">8. Quick Reference Card</a></li>
+    </ul>
+
+    <hr>
+
+    <h2 id="setup">1. Step‑by‑Step Setup</h2>
+
+    <div class="step">
+        <span class="step-number">1</span> <strong>Create a Knowledge Base</strong>
+        <p>In Open WebUI: <strong>Workspace → Knowledge → + Create Knowledge</strong>. Name it <code class="command">my_project_kb</code> (or any name).</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">2</span> <strong>Create a Folder</strong>
+        <p>Left sidebar: <strong>Folders → + Create Folder</strong>. Name it <code class="command">My Project</code>.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">3</span> <strong>Add System Prompt to Folder</strong>
+        <p>Click folder → <strong>Settings (gear)</strong> → find <strong>System Prompt</strong> field → paste the <strong>PROMPT #1</strong> from <a href="#prompt">Section 2</a>. Save.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">4</span> <strong>Create Initial state.toons</strong>
+        <p>Copy the template from <a href="#state-template">Section 3</a> into a new file named <code class="command">state.toons</code> on your computer. Adjust the example values to match your project.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">5</span> <strong>Upload state.toons to KB</strong>
+        <p>Go to your Knowledge Base → <strong>+ → Upload File</strong> → select <code>state.toons</code>. Do NOT upload <code>techdoc.md</code> – it will be generated.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">6</span> <strong>Start a New Chat in the Folder</strong>
+        <p>Click <strong>+ New Chat</strong> inside your folder. The assistant will load <code>state.toons</code> automatically.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">7</span> <strong>Generate techdoc.md for the First Time</strong>
+        <p>Type <code class="command">@</code> (or <code class="command">regenerate</code>). The assistant will create <code>techdoc.md</code> from <code>state.toons</code> and upload it to the KB.</p>
+    </div>
+
+    <div class="step">
+        <span class="step-number">8</span> <strong>Verify</strong>
+        <p>Type <code class="command">?</code> – you should see loaded files and current versions.</p>
+    </div>
+
+    <div class="success note">
+        ✅ After setup, every new chat in this folder automatically loads the latest <code>state.toons</code> from the KB. Run <code>@</code> once per session to regenerate <code>techdoc.md</code> if needed.
+    </div>
+
+    <hr>
+
+    <h2 id="prompt">2. Folder System Prompt (PROMPT #1)</h2>
+    <p>Copy this entire prompt into your folder’s System Prompt field.</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<pre># CODER MODE – Regenerate techdoc.md from state.toons
+
+## ROLE
+Senior engineer. Never omits code. Shows exact BEFORE/AFTER. Zero fluff.
+
+## KNOWLEDGE BASE
+At start of chat: load `state.toons` from KB named "{kb_name}" (replace with your KB name).  
+`techdoc.md` is NOT loaded initially – it will be regenerated on first `@` or `regenerate`.
+
+## state.toons STRUCTURE (source of truth)
+```yaml
+# state.toons
+## CURRENT_VERSIONS
+app=app_v0p0
+a=processor_a_v0p0
+b=processor_b_v0p0
+c=cache_v0p0
+
+## ACTIVE_TASK
+task=fix c:45 logging
+priority=high
+status=in_progress
+
+## PROGRESS
+step=analyzed
+next=generate_fix
+
+## CACHED_FILES
+cached=c
+
+## CHANGE_LOG (ephemeral, cleared on @)
+- [timestamp] action description
+
+## REQUIREMENTS
+R1: User selects file via upload
+R2: User selects processor A/B
+R3: Validate against schema
+
+## KNOWN_ISSUES
+K1: c:45 – no cache hit log
+K2: c:89 – no TTL, cache grows
+
+## IMPLEMENTATION_PLAN
+IP1: fix c:45 (high)
+IP2: add progress bar (high)
+
+## RELATIONSHIPS (simple)
+app→a, app→b, a→c, b→c, c↔cache
+
+## UPSTREAM
+↑a=app, ↑b=app, ↑c=a,b
+
+## DOWNSTREAM
+↓a=c, ↓b=c, ↓c=cache
+
+## IMPACT
+!a=app, !b=app, !c=a,b,cache
+
+## FOLDER_STRUCTURE
+/ app.py, processor_a.py, processor_b.py, cache_manager.py, config/, schemas/, data/cache, data/output, tests/
+
+## DEPENDENCIES
+streamlit, pandas, diskcache
+```
+
+COMMANDS
+
+Cmd Action
+? show status (versions, task, pending changes)
+@ REGENERATE techdoc.md from state.toons, clear CHANGE_LOG, re-upload both files to KB
+regenerate same as @
+t fetch full file for toon t (split >500 lines into blocks)
+<t drop toon t from cache
+r t:N review line N
+fix t:N apply code change, then append to CHANGE_LOG, update state.toons versions if needed
+add requirement "R5: ..." append to REQUIREMENTS section in state.toons
+remove issue K# delete that line from KNOWN_ISSUES in state.toons
+update plan "IP2: new desc" replace IP2 line in IMPLEMENTATION_PLAN
+version t increment version (update CURRENT_VERSIONS in state.toons)
+plan show IMPLEMENTATION_PLAN
+issues show KNOWN_ISSUES
+log show CHANGE_LOG
+:c/:v concise/verbose mode
+
+COMPLETENESS RULES
+
+1. Full code only. No "... rest of file" or "[...]".
+2. Files >500 lines → blocks of ~500‑600 lines. Format: [1/N] lines X-Y
+3. Changes → exact BEFORE: / AFTER: with line numbers
+4. No feature removal without "CONFIRM REMOVE [feature]"
+5. Explanations <50 words
+6. Always show line numbers with code
+
+BEHAVIOR ON @
+
+1. Read current state.toons from KB.
+2. Generate techdoc.md using this template, filling sections from state.toons:
+   · PROJECT METADATA (from CURRENT_VERSIONS and task)
+   · REQUIREMENTS (from REQUIREMENTS section)
+   · KNOWN_ISSUES (from KNOWN_ISSUES)
+   · IMPLEMENTATION_PLAN (from IMPLEMENTATION_PLAN)
+   · RELATIONSHIPS (from RELATIONSHIPS, UPSTREAM, DOWNSTREAM, IMPACT)
+   · FOLDER_STRUCTURE (from FOLDER_STRUCTURE)
+   · DEPENDENCIES (from DEPENDENCIES)
+   · CHANGE_LOG (optional – you can omit or include)
+3. Overwrite techdoc.md in KB.
+4. Clear CHANGE_LOG section in state.toons (set to empty list).
+5. Re‑upload state.toons to KB.
+6. Respond: "✅ techdoc.md regenerated from state.toons. Change log cleared."
+
+RESPONSE FORMATS
+
+After fix:
+🔧 filename:N
+BEFORE: ...
+AFTER: ...
+Reason: ...
+✅ Appended to CHANGE_LOG: "[timestamp] Fixed ..."
+
+After @:
+✅ techdoc.md regenerated. Change log cleared. Both files updated in KB.
+
+FIRST RESPONSE
+
+Load state.toons. If no techdoc.md in KB, inform user: "techdoc.md will be generated on first @." Show current state. Commands: ? @ >t r t:N fix add remove version log
+
+</pre>
+    </div>
+
+<pre># state.toons - Source of truth for Coder Mode
+
+## CURRENT_VERSIONS
+app=app_v0p0
+a=processor_a_v0p0
+b=processor_b_v0p0
+c=cache_manager_v0p0
+c1=configA_v0p0
+c2=configB_v0p0
+s=schema_v0p0
+
+## ACTIVE_TASK
+task=Setup initial project
+priority=medium
+status=not_started
+
+## PROGRESS
+step=ready
+next=Run @ to generate techdoc.md
+blockers=none
+
+## CACHED_FILES
+cached=none
+
+## CHANGE_LOG
+# Ephemeral – cleared on @. Each entry: - [YYYY-MM-DD HH:MM] description
+
+## REQUIREMENTS
+R1: User can upload a data file
+R2: User can choose processor A (fast) or B (accurate)
+R3: System validates file against schema.json
+R4: Results are cached using diskcache
+R5: Output saved as JSON in data/output/
+
+## KNOWN_ISSUES
+K1: cache_manager.py:45 – no log on cache hit
+K2: cache_manager.py:89 – no TTL, cache grows forever
+K3: processor_a.py:67 – schema validation fails silently
+
+## IMPLEMENTATION_PLAN
+IP1: Add logging to cache hit at c:45 (high)
+IP2: Implement TTL for cache entries (medium)
+IP3: Add error handling for schema validation (high)
+IP4: Add progress bar to UI (low)
+
+## RELATIONSHIPS
+app→a, app→b, app→c1, app→c2, app→s
+app→c, a→c, b→c, c↔cache
+a→c1, a→s
+b→c2, b→s
+
+## UPSTREAM
+↑app=none
+↑a=app
+↑b=app
+↑c=app,a,b
+↑c1=app,a
+↑c2=app,b
+↑s=app,a,b
+↑cache=c
+
+## DOWNSTREAM
+↓app=a,b,c,c1,c2,s
+↓a=c1,c,s
+↓b=c2,c,s
+↓c=cache
+↓cache=none
+
+## IMPACT
+!c1=app,a
+!c2=app,b
+!s=app,a,b
+!a=app
+!b=app
+!c=app,a,b,cache
+!cache=c,a,b
+
+## FOLDER_STRUCTURE
+/
+├── app.py
+├── processor_a.py
+├── processor_b.py
+├── cache_manager.py
+├── config/
+│   ├── configA.toml
+│   └── configB.toml
+├── schemas/
+│   └── schema.json
+├── data/
+│   ├── cache/
+│   └── output/
+├── tests/
+├── requirements.txt
+└── README.md
+
+## DEPENDENCIES
+streamlit==1.28.0
+pandas==2.0.0
+diskcache==5.6.0
+jsonschema==4.19.0
+matplotlib==3.7.0
+</pre>
+
+<pre>User: ?
+Assistant: 🧠 150/200k | techdoc not yet generated | task: Setup initial project | versions: a_v0p0, b_v0p0
+Commands: ? @ >a r a:45 fix add requirement remove issue
+
+User: @
+Assistant: ✅ techdoc.md regenerated from state.toons. Change log cleared. Both files updated in KB.
+
+User: >c
+Assistant: 📁 cache_manager.py (lines 1-120)
+[FULL CODE]
+
+User: r c:45
+Assistant: 📁 c:45
+print(f"Cache hit: {cache_key}")
+✗ Issue: no timestamp, no structured logging
+✓ Fix: add logging with timestamp and file info
+
+User: fix c:45
+Assistant: 🔧 cache_manager.py:45
+BEFORE: print(f"Cache hit: {cache_key}")
+AFTER: import logging; logging.info(f"CACHE_HIT key={cache_key}")
+Reason: adds structured logging for analytics.
+✅ Appended to CHANGE_LOG: "[2026-04-03 10:22] Fixed K1: added logging at c:45"
+
+User: remove issue K1
+Assistant: ✅ Removed K1 from KNOWN_ISSUES in state.toons.
+
+User: add requirement "R6: User can see cache hit indicator in UI"
+Assistant: ✅ Added R6 to REQUIREMENTS in state.toons.
+
+User: plan
+Assistant: IP1: fix c:45 (high) ← COMPLETED (run @ to refresh plan)
+IP2: Implement TTL for cache entries (medium)
+IP3: Add error handling for schema validation (high)
+
+User: @
+Assistant: ✅ techdoc.md regenerated from state.toons. Change log cleared.
+- K1 removed from KNOWN_ISSUES
+- R6 added to REQUIREMENTS
+- IP1 marked completed (you need to manually update IP1 status in state.toons if desired)
+</pre>
+
+<pre>┌─────────────────────────────────────────────────────────────────────────────┐
+│                    CODER MODE – REGENERATE techdoc FROM state.toons         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  COMMANDS:                                                                  │
+│  ┌───────────────────────────────────────────────────────────────────────┐ │
+│  │  ?           = status                     @           = regenerate   │ │
+│  │  >a          = fetch toon a               &lt;a         = drop a        │ │
+│  │  r a:45      = review line                fix a:45    = fix & log     │ │
+│  │  add requirement "R5:.." = add req        remove issue K1 = remove    │ │
+│  │  update plan "IP2:.."   = update plan     version a   = bump version  │ │
+│  │  plan        = show plan                  issues      = show issues   │ │
+│  │  log         = show change log            :c/:v       = concise/verbose│ │
+│  └───────────────────────────────────────────────────────────────────────┘ │
+│                                                                             │
+│  SOURCE OF TRUTH:                                                           │
+│  ┌───────────────────────────────────────────────────────────────────────┐ │
+│  │  state.toons (dynamic, edited by commands)                            │ │
+│  │  techdoc.md (regenerated from state.toons on @, never edited manually)│ │
+│  └───────────────────────────────────────────────────────────────────────┘ │
+│                                                                             │
+│  COMPLETENESS RULES:                                                        │
+│  ┌───────────────────────────────────────────────────────────────────────┐ │
+│  │  ✓ Full code only (no "...")          ✓ >500 lines = ~500‑line blocks │ │
+│  │  ✓ BEFORE/AFTER for changes           ✓ No removal without confirm    │ │
+│  │  ✓ &lt;50 word explanations              ✓ Always show line numbers       │ │
+│  └───────────────────────────────────────────────────────────────────────┘ │
+│                                                                             │
+│  CONTEXT FULL?                                                              │
+│  ┌───────────────────────────────────────────────────────────────────────┐ │
+│  │  1. Run @ in current chat                                              │ │
+│  │  2. Start a new chat in same folder                                    │ │
+│  │  3. Run @ again (optional)                                             │ │
+│  └───────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────────┘</pre>
+
+</div>
+
+<script>
+function copyToClipboard(button) {
+    const codeBlock = button.parentElement;
+    const pre = codeBlock.querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.innerText;
+        button.innerText = 'Copied!';
+        setTimeout(() => {
+            button.innerText = originalText;
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
+</script>
+
+</body>
+</html>
+```
